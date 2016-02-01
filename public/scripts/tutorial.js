@@ -55,12 +55,12 @@ var CommentForm = React.createClass({
 		if (!text || !author) {
 			return;
 		}
-		//TODO: send request to the server
+		this.props.onCommentSubmit({author: author, text: text});
 		this.setState({author: '', text: ''});
 	},
 	render: function() {
 		return (
-			<form className="commentForm" onSubmit={this.handleSubmit}>
+			<form className="commentForm">
 				<input
 					type="text"
 					placeholder="Your name"
@@ -93,6 +93,9 @@ var CommentBox = React.createClass({
 			}.bind(this)
 		});
 	},
+	handleCommentSubmit: function(comment) {
+		//TODO: Submit to the server and refresh the list
+	},
 	getInitialState: function() {
 		return {data: []};
 	},
@@ -105,13 +108,13 @@ var CommentBox = React.createClass({
 			<div className="commentBox">
 				<h1>Comments</h1>
 				<CommentList data={this.state.data} />
-				<CommentForm />
+				<CommentForm onCommentSubmit={this.handleCommentSubmit} />
 			</div>
 		);
 	}
 });
 
 ReactDOM.render(
-	<CommentBox url="https://dl.dropboxusercontent.com/content_link/OtJZcRopjuj8wgXCjhTXL1newtT9MohYT6oqpjCFfqzih340TTsd01x7l50FpgCS/file" pollInterval={5000} />,
+	<CommentBox url="/api/comments.json" pollInterval={5000} />,
 	document.getElementById('content')
 );
